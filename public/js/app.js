@@ -108,6 +108,7 @@ module.exports = __webpack_require__(7);
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+var TodoList = __webpack_require__(17);
 
 window.Vue = __webpack_require__(3);
 
@@ -117,11 +118,12 @@ window.Vue = __webpack_require__(3);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('todo-list', __webpack_require__(17));
-Vue.component('todo-item', __webpack_require__(20));
-
 var app = new Vue({
-  el: '#app'
+  el: '#app',
+
+  components: {
+    'todo-list': TodoList
+  }
 });
 
 /***/ }),
@@ -11315,7 +11317,7 @@ process.umask = function() { return 0; };
 var disposed = false
 var normalizeComponent = __webpack_require__(18)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(22)
 /* template */
 var __vue_template__ = __webpack_require__(19)
 /* template functional */
@@ -11489,6 +11491,15 @@ var render = function() {
         attrs: { type: "text", placeholder: "What do you need to do?" },
         domProps: { value: _vm.todo },
         on: {
+          keyup: function($event) {
+            if (
+              !("button" in $event) &&
+              _vm._k($event.keyCode, "enter", 13, $event.key)
+            ) {
+              return null
+            }
+            _vm.addTodo($event)
+          },
           input: function($event) {
             if ($event.target.composing) {
               return
@@ -11499,7 +11510,13 @@ var render = function() {
       })
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "todo-items" }, [_c("todo-item")], 1)
+    _c(
+      "div",
+      { staticClass: "todo-items" },
+      _vm._l(_vm.todos, function(todo) {
+        return _c("todo-item", { key: "todo.id", attrs: { todo: todo } })
+      })
+    )
   ])
 }
 var staticRenderFns = [
@@ -11528,7 +11545,7 @@ if (false) {
 var disposed = false
 var normalizeComponent = __webpack_require__(18)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(23)
 /* template */
 var __vue_template__ = __webpack_require__(21)
 /* template functional */
@@ -11577,7 +11594,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "todo-item" }, [_vm._v("\n    First item\n")])
+  return _c("div", { staticClass: "todo-item" }, [
+    _c("span", { staticClass: "todo-name" }, [
+      _vm._v(_vm._s(_vm.todo.id) + ": " + _vm._s(_vm.todo.text))
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -11588,6 +11609,71 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-3648b81d", module.exports)
   }
 }
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var TodoItem = __webpack_require__(20);
+
+module.exports = {
+    components: {
+        'todo-item': TodoItem
+    },
+
+    data: function data() {
+        return {
+            todo: '',
+
+            todos: [{ id: 1, text: 'Get Groceries' }, { id: 2, text: 'Buy new TV' }, { id: 3, text: 'Begin workout' }],
+
+            nextTodoId: 4
+        };
+    },
+
+    methods: {
+        addTodo: function addTodo() {
+            this.todos.push({ id: this.nextTodoId, text: this.todo });
+            this.todo = '';
+            this.nextTodoId += 1;
+        }
+    }
+};
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
+
+//
+//
+//
+//
+//
+//
+
+
+module.exports = {
+    props: {
+        todo: Object
+    }
+};
 
 /***/ })
 /******/ ]);

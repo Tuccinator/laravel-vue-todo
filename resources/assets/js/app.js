@@ -4,7 +4,7 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-
+const TodoList = require('./components/TodoListComponent.vue');
 
 window.Vue = require('vue');
 
@@ -14,10 +14,10 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('todo-list', require('./components/TodoListComponent.vue'));
-Vue.component('todo-item', require('./components/TodoItemComponent.vue'));
-
-
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+
+    components: {
+        'todo-list': TodoList
+    }
 });
