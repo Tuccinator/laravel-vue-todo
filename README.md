@@ -6,4 +6,4 @@ To-do List implemented in Vue and Laravel
 - [x] Remove todo from database (instead makes the status REMOVED)
 - [x] Make existing todo starred (stay at the top)
 - [x] Mark existing todo as completed
-- [ ] Filter todos (available, completed)
+- [x] Filter todos (available, completed)
