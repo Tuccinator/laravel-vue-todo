@@ -5,6 +5,7 @@
             <i class="fa fa-star" v-if="todo.starred"></i>
             <i class="fa fa-star-o" v-else></i>
         </div>
+        <button v-on:click="complete">Completed</button>
         <button v-on:click="remove">x</button>
     </div>
 </template>
@@ -44,6 +45,19 @@ module.exports = {
                         this.$emit('update-todo', result.updated_todo);
                     }
                 });
+        },
+
+        complete: function() {
+            const todoId = this.todo.id;
+
+            axios.post(`/api/todos/${todoId}`)
+                .then(response => {
+                    const result = response.data;
+
+                    if(result.success) {
+                        this.$emit('update-todo', result.updated_todo);
+                    }
+                })
         }
     }
 };

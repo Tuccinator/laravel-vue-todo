@@ -442,6 +442,7 @@ module.exports = Component.exports
 //
 //
 //
+//
 
 var axios = __webpack_require__(31);
 var status = __webpack_require__(52);
@@ -479,6 +480,20 @@ module.exports = {
                     _this2.$emit('update-todo', result.updated_todo);
                 }
             });
+        },
+
+        complete: function complete() {
+            var _this3 = this;
+
+            var todoId = this.todo.id;
+
+            axios.post('/api/todos/' + todoId).then(function (response) {
+                var result = response.data;
+
+                if (result.success) {
+                    _this3.$emit('update-todo', result.updated_todo);
+                }
+            });
         }
     }
 };
@@ -499,6 +514,8 @@ var render = function() {
         ? _c("i", { staticClass: "fa fa-star" })
         : _c("i", { staticClass: "fa fa-star-o" })
     ]),
+    _vm._v(" "),
+    _c("button", { on: { click: _vm.complete } }, [_vm._v("Completed")]),
     _vm._v(" "),
     _c("button", { on: { click: _vm.remove } }, [_vm._v("x")])
   ])

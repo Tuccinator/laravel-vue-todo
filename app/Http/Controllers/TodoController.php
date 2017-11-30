@@ -89,4 +89,27 @@ class TodoController extends Controller
 
         return json_encode(['success' => true, 'updated_todo' => $todo->toArray()]);
     }
+
+    /**
+     * Complete a todo item
+     *
+     * @param int $id
+     * @return json
+     */
+    public function complete(int $id)
+    {
+        $todo = Todo::find($id);
+
+        if(is_null($todo)) {
+            return json_encode(['success' => false, 'message' => 'Todo item does not exist.']);
+        }
+
+        $todo->status = Todo::COMPLETED;
+
+        if(!$todo->save()) {
+            return json_encode(['success' => false, 'message' => 'Todo could not be completed.']);            
+        }
+
+        return json_encode(['success' => true, 'updated_todo' => $todo->toArray()]);
+    }
 }
