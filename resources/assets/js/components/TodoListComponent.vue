@@ -49,7 +49,7 @@ module.exports = {
 
                     // check if successfully added
                     if(result.success) {
-                        const newTodo = JSON.parse(result.inserted_todo);
+                        const newTodo = result.inserted_todo;
 
                         this.todos.push(newTodo);
                         this.todo = '';
@@ -57,10 +57,11 @@ module.exports = {
                 })
         },
 
-        updateTodo: function({ id, status }) {
+        updateTodo: function({ id, status, starred }) {
             const index = _.findIndex(this.todos, todo => { return todo.id === id });
             const newTodo = this.todos[index];
             newTodo.status = status;
+            newTodo.starred = starred;
 
             this.todos[index] = newTodo;
         }
@@ -68,8 +69,14 @@ module.exports = {
 
     computed: {
         availableTodos: function() {
-            return this.todos.filter(function(todo) {
+            return this.sortTodos.filter(function(todo) {
                 return todo.status === status.ACTIVE;
+            });
+        },
+
+        sortTodos: function() {
+            return this.todos.sort(function(a, b) {
+                return a.starred < b.starred;
             });
         }
     }

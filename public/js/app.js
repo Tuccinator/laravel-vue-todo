@@ -340,7 +340,7 @@ module.exports = {
 
                 // check if successfully added
                 if (result.success) {
-                    var newTodo = JSON.parse(result.inserted_todo);
+                    var newTodo = result.inserted_todo;
 
                     _this2.todos.push(newTodo);
                     _this2.todo = '';
@@ -350,13 +350,15 @@ module.exports = {
 
         updateTodo: function updateTodo(_ref) {
             var id = _ref.id,
-                status = _ref.status;
+                status = _ref.status,
+                starred = _ref.starred;
 
             var index = _.findIndex(this.todos, function (todo) {
                 return todo.id === id;
             });
             var newTodo = this.todos[index];
             newTodo.status = status;
+            newTodo.starred = starred;
 
             this.todos[index] = newTodo;
         }
@@ -364,8 +366,14 @@ module.exports = {
 
     computed: {
         availableTodos: function availableTodos() {
-            return this.todos.filter(function (todo) {
+            return this.sortTodos.filter(function (todo) {
                 return todo.status === status.ACTIVE;
+            });
+        },
+
+        sortTodos: function sortTodos() {
+            return this.todos.sort(function (a, b) {
+                return a.starred < b.starred;
             });
         }
     }
@@ -430,6 +438,10 @@ module.exports = Component.exports
 //
 //
 //
+//
+//
+//
+//
 
 var axios = __webpack_require__(31);
 var status = __webpack_require__(52);
@@ -444,12 +456,27 @@ module.exports = {
             var _this = this;
 
             var todoId = this.todo.id;
+            var starred = this.todo.starred;
 
             axios.delete('/api/todos/' + todoId).then(function (response) {
                 var result = response.data;
 
                 if (result.success) {
-                    _this.$emit('update-todo', { id: todoId, status: status.REMOVED });
+                    _this.$emit('update-todo', { id: todoId, status: status.REMOVED, starred: starred });
+                }
+            });
+        },
+
+        star: function star() {
+            var _this2 = this;
+
+            var todoId = this.todo.id;
+
+            axios.post('/api/todos/' + todoId + '/star').then(function (response) {
+                var result = response.data;
+
+                if (result.success) {
+                    _this2.$emit('update-todo', result.updated_todo);
                 }
             });
         }
@@ -465,8 +492,12 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "todo-item" }, [
-    _c("span", { staticClass: "todo-name" }, [
-      _vm._v(_vm._s(_vm.todo.id) + ": " + _vm._s(_vm.todo.text))
+    _c("span", { staticClass: "todo-name" }, [_vm._v(_vm._s(_vm.todo.text))]),
+    _vm._v(" "),
+    _c("div", { staticClass: "star-button", on: { click: _vm.star } }, [
+      _vm.todo.starred
+        ? _c("i", { staticClass: "fa fa-star" })
+        : _c("i", { staticClass: "fa fa-star-o" })
     ]),
     _vm._v(" "),
     _c("button", { on: { click: _vm.remove } }, [_vm._v("x")])

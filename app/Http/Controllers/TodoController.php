@@ -40,7 +40,7 @@ class TodoController extends Controller
             return json_encode(['success' => false, 'message' => 'Todo could not be added to database.']);
         }
 
-        return json_encode(['success' => true, 'inserted_todo' => $todo->toJson()]);
+        return json_encode(['success' => true, 'inserted_todo' => $todo->toArray()]);
     }
 
     /**
@@ -64,5 +64,29 @@ class TodoController extends Controller
         }
 
         return json_encode(['success' => true]);
+    }
+
+    /**
+     * Star/unstar a todo item
+     *
+     * @param int $id
+     * @return json
+     */
+    public function star(int $id)
+    {
+        $todo = Todo::find($id);
+        
+        if(is_null($todo)) {
+            return json_encode(['success' => false, 'message' => 'Todo item does not exist.']);
+        }
+
+        // star/unstar based on previous record
+        $todo->starred = !$todo->starred;
+
+        if(!$todo->save()) {
+            return json_encode(['success' => false, 'message' => 'Todo could not be starred/unstarred.']);            
+        }
+
+        return json_encode(['success' => true, 'updated_todo' => $todo->toArray()]);
     }
 }

@@ -17,6 +17,7 @@ class CreateTodosTable extends Migration
             $table->increments('id');
             $table->string('text');
             $table->integer('status');
+            $table->boolean('starred')->default(0);
             $table->timestamps();
         });
     }
