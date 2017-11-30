@@ -4,10 +4,10 @@
             <span>To-Do List</span>
         </div>
 
-        <ul class="filters">
-            <li v-on:click="changeFilter(filtering.ACTIVE)">Active</li>
-            <li v-on:click="changeFilter(filtering.COMPLETED)">Completed</li>
-            <li v-on:click="changeFilter(filtering.ALL)">ALL</li>
+        <ul class="todo-filter">
+            <li v-on:click="changeFilter(filtering.ACTIVE)" v-bind:class="{ selected: currentFilter === filtering.ACTIVE }">Active</li>
+            <li v-on:click="changeFilter(filtering.COMPLETED)" v-bind:class="{ selected: currentFilter === filtering.COMPLETED }">Completed</li>
+            <li v-on:click="changeFilter(filtering.ALL)" v-bind:class="{ selected: currentFilter === filtering.ALL }">ALL</li>
         </ul>
 
         <div class="todo-add">

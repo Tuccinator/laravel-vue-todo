@@ -1,12 +1,16 @@
 <template>
     <div class="todo-item">
         <span class="todo-name">{{ todo.text }}</span>
+        <div class="action-button action-remove">
+            <i class="fa fa-times" v-on:click="remove" v-if="todo.status === 1"></i>
+        </div>
+        <div class="action-button action-complete">
+            <i class="fa fa-check" v-on:click="complete" v-if="todo.status === 1"></i>
+        </div>
         <div class="star-button" v-on:click="star">
             <i class="fa fa-star" v-if="todo.starred"></i>
             <i class="fa fa-star-o" v-else></i>
         </div>
-        <button v-on:click="complete" v-if="todo.status === 1">Completed</button>
-        <button v-on:click="remove" v-if="todo.status === 1">x</button>
     </div>
 </template>
 

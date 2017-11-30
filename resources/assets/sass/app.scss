@@ -1,9 +1,108 @@
-
-// Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-
-// Variables
 @import "variables";
 
-// Bootstrap
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+body {
+    background: image-url('intersection.png');
+    background-repeat: repeat;
+    font-family: 'Raleway', 'Arial', sans-serif;
+}
+
+#app {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.todo-list {
+    width: 30%;
+    min-height: 50vh;
+    border: 3px solid $grey;
+    background-color: white;
+
+    .todo-header {
+        background-color: $grey;
+        padding: 1rem;
+        font-size: 1.6rem;
+        color: white;
+        text-shadow: -1px -1px darken($grey, 25);
+        text-transform: uppercase;
+    }
+
+    .todo-filter {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        overflow: hidden;
+        clear: both;
+
+        li {
+            float: left;
+            padding: 1rem;
+            width: 33.3%;
+            box-sizing: border-box;
+            text-align: center;
+            border-bottom: 1px solid lighten($grey, 5);
+            border-right: 1px solid lighten($grey, 5);
+            text-transform: uppercase;
+            cursor: pointer;
+
+            &:hover, &.selected {
+                background-color: lighten($grey, 5);
+                color: white;
+            }
+
+            &:last-child {
+                border-right: none;
+            }
+        }
+    }
+
+    input {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid lighten($grey, 5);
+        box-sizing: border-box;
+        padding: 1rem;
+        font-size: 0.8rem;
+    }
+
+    .todo-item {
+        padding: 0.5rem;
+        overflow: hidden;
+
+        .todo-name {
+            font-size: 0.8rem;
+            color: $blue;
+        }
+
+        .star-button {
+            float: right;
+            color: $gold;
+            cursor: pointer;
+        }
+
+        .action-button {
+            cursor: pointer;
+            float: right;
+            padding-left: 0.5rem;
+
+            &.action-remove {
+                color: $red;
+
+                &:hover {
+                    color: darken($red, 10);
+                }
+            }
+
+            &.action-complete {
+                color: $green;
+
+                &:hover {
+                    color: darken($green, 10);
+                }
+            }
+        }
+    }
+}

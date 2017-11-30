@@ -469,6 +469,10 @@ module.exports = Component.exports
 //
 //
 //
+//
+//
+//
+//
 
 var axios = __webpack_require__(31);
 var status = __webpack_require__(52);
@@ -538,19 +542,23 @@ var render = function() {
   return _c("div", { staticClass: "todo-item" }, [
     _c("span", { staticClass: "todo-name" }, [_vm._v(_vm._s(_vm.todo.text))]),
     _vm._v(" "),
+    _c("div", { staticClass: "action-button action-remove" }, [
+      _vm.todo.status === 1
+        ? _c("i", { staticClass: "fa fa-times", on: { click: _vm.remove } })
+        : _vm._e()
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "action-button action-complete" }, [
+      _vm.todo.status === 1
+        ? _c("i", { staticClass: "fa fa-check", on: { click: _vm.complete } })
+        : _vm._e()
+    ]),
+    _vm._v(" "),
     _c("div", { staticClass: "star-button", on: { click: _vm.star } }, [
       _vm.todo.starred
         ? _c("i", { staticClass: "fa fa-star" })
         : _c("i", { staticClass: "fa fa-star-o" })
-    ]),
-    _vm._v(" "),
-    _vm.todo.status === 1
-      ? _c("button", { on: { click: _vm.complete } }, [_vm._v("Completed")])
-      : _vm._e(),
-    _vm._v(" "),
-    _vm.todo.status === 1
-      ? _c("button", { on: { click: _vm.remove } }, [_vm._v("x")])
-      : _vm._e()
+    ])
   ])
 }
 var staticRenderFns = []
@@ -574,10 +582,11 @@ var render = function() {
   return _c("div", { staticClass: "todo-list" }, [
     _vm._m(0, false, false),
     _vm._v(" "),
-    _c("ul", { staticClass: "filters" }, [
+    _c("ul", { staticClass: "todo-filter" }, [
       _c(
         "li",
         {
+          class: { selected: _vm.currentFilter === _vm.filtering.ACTIVE },
           on: {
             click: function($event) {
               _vm.changeFilter(_vm.filtering.ACTIVE)
@@ -590,6 +599,7 @@ var render = function() {
       _c(
         "li",
         {
+          class: { selected: _vm.currentFilter === _vm.filtering.COMPLETED },
           on: {
             click: function($event) {
               _vm.changeFilter(_vm.filtering.COMPLETED)
@@ -602,6 +612,7 @@ var render = function() {
       _c(
         "li",
         {
+          class: { selected: _vm.currentFilter === _vm.filtering.ALL },
           on: {
             click: function($event) {
               _vm.changeFilter(_vm.filtering.ALL)
