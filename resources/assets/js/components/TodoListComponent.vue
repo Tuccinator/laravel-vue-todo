@@ -4,6 +4,12 @@
             <span>To-Do List</span>
         </div>
 
+        <ul class="filters">
+            <li v-on:click="changeFilter(filtering.ACTIVE)">Active</li>
+            <li v-on:click="changeFilter(filtering.COMPLETED)">Completed</li>
+            <li v-on:click="changeFilter(filtering.ALL)">ALL</li>
+        </ul>
+
         <div class="todo-add">
             <input type="text" v-model="todo" @keyup.enter="addTodo" placeholder="What do you need to do?" />
         </div>
@@ -37,7 +43,13 @@ module.exports = {
     data: function() {
         return {
             todo: '',
-            todos: []
+            todos: [],
+            currentFilter: 1,
+            filtering: {
+                ACTIVE: 1,
+                COMPLETED: 2,
+                ALL: 3
+            }
         };
     },
 
@@ -64,13 +76,25 @@ module.exports = {
             newTodo.starred = starred;
 
             this.todos[index] = newTodo;
+        },
+
+        changeFilter: function(filter) {
+            this.currentFilter = filter;
         }
     },
 
     computed: {
         availableTodos: function() {
-            return this.sortTodos.filter(function(todo) {
-                return todo.status === status.ACTIVE;
+            return this.sortTodos.filter((todo) => {
+                switch(this.currentFilter) {
+                    case 3:
+                        return true;
+                    case 2:
+                        return todo.status === status.COMPLETED;
+                    case 1:
+                    default:
+                        return todo.status === status.ACTIVE;
+                }
             });
         },
 

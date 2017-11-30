@@ -303,6 +303,12 @@ module.exports = Component.exports
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 var TodoItem = __webpack_require__(6);
 var status = __webpack_require__(52);
@@ -327,7 +333,13 @@ module.exports = {
     data: function data() {
         return {
             todo: '',
-            todos: []
+            todos: [],
+            currentFilter: 1,
+            filtering: {
+                ACTIVE: 1,
+                COMPLETED: 2,
+                ALL: 3
+            }
         };
     },
 
@@ -361,13 +373,27 @@ module.exports = {
             newTodo.starred = starred;
 
             this.todos[index] = newTodo;
+        },
+
+        changeFilter: function changeFilter(filter) {
+            this.currentFilter = filter;
         }
     },
 
     computed: {
         availableTodos: function availableTodos() {
+            var _this3 = this;
+
             return this.sortTodos.filter(function (todo) {
-                return todo.status === status.ACTIVE;
+                switch (_this3.currentFilter) {
+                    case 3:
+                        return true;
+                    case 2:
+                        return todo.status === status.COMPLETED;
+                    case 1:
+                    default:
+                        return todo.status === status.ACTIVE;
+                }
             });
         },
 
@@ -472,6 +498,9 @@ module.exports = {
             var _this2 = this;
 
             var todoId = this.todo.id;
+            var todoStatus = this.todo.status;
+
+            if (todoStatus !== status.ACTIVE) return;
 
             axios.post('/api/todos/' + todoId + '/star').then(function (response) {
                 var result = response.data;
@@ -515,9 +544,13 @@ var render = function() {
         : _c("i", { staticClass: "fa fa-star-o" })
     ]),
     _vm._v(" "),
-    _c("button", { on: { click: _vm.complete } }, [_vm._v("Completed")]),
+    _vm.todo.status === 1
+      ? _c("button", { on: { click: _vm.complete } }, [_vm._v("Completed")])
+      : _vm._e(),
     _vm._v(" "),
-    _c("button", { on: { click: _vm.remove } }, [_vm._v("x")])
+    _vm.todo.status === 1
+      ? _c("button", { on: { click: _vm.remove } }, [_vm._v("x")])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -540,6 +573,44 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "todo-list" }, [
     _vm._m(0, false, false),
+    _vm._v(" "),
+    _c("ul", { staticClass: "filters" }, [
+      _c(
+        "li",
+        {
+          on: {
+            click: function($event) {
+              _vm.changeFilter(_vm.filtering.ACTIVE)
+            }
+          }
+        },
+        [_vm._v("Active")]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          on: {
+            click: function($event) {
+              _vm.changeFilter(_vm.filtering.COMPLETED)
+            }
+          }
+        },
+        [_vm._v("Completed")]
+      ),
+      _vm._v(" "),
+      _c(
+        "li",
+        {
+          on: {
+            click: function($event) {
+              _vm.changeFilter(_vm.filtering.ALL)
+            }
+          }
+        },
+        [_vm._v("ALL")]
+      )
+    ]),
     _vm._v(" "),
     _c("div", { staticClass: "todo-add" }, [
       _c("input", {

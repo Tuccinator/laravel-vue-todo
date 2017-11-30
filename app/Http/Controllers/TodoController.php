@@ -57,9 +57,7 @@ class TodoController extends Controller
             return json_encode(['success' => false, 'message' => 'Todo item does not exist.']);
         }
 
-        $todo->status = Todo::REMOVED;
-        
-        if(!$todo->save()) {
+        if(!$todo->delete()) {
             return json_encode(['success' => false, 'message' => 'Todo could not be removed.']);            
         }
 

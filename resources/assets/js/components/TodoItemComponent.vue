@@ -5,8 +5,8 @@
             <i class="fa fa-star" v-if="todo.starred"></i>
             <i class="fa fa-star-o" v-else></i>
         </div>
-        <button v-on:click="complete">Completed</button>
-        <button v-on:click="remove">x</button>
+        <button v-on:click="complete" v-if="todo.status === 1">Completed</button>
+        <button v-on:click="remove" v-if="todo.status === 1">x</button>
     </div>
 </template>
 
@@ -36,6 +36,9 @@ module.exports = {
 
         star: function() {
             const todoId = this.todo.id;
+            const todoStatus = this.todo.status;
+
+            if(todoStatus !== status.ACTIVE) return;
 
             axios.post(`/api/todos/${todoId}/star`)
                 .then(response => {
